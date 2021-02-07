@@ -10,7 +10,7 @@ app = Flask(__name__, instance_relative_config=True)
 
 app.config.from_object(Config)
 
-cors = CORS(app, origins='http://localhost:8080')
+cors = CORS(app, origins='http://localhost')
 db = MongoEngine(app)
 
-socketio = SocketIO(app, cors_allowed_origins='http://localhost:8080')
+socketio = SocketIO(app, cors_allowed_origins='http://localhost', path="/socket")

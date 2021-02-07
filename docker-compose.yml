@@ -1,48 +1,35 @@
-version: "1.0"
+version: "3.9"
 
 services:
-    nginx:
-        build: ./nginx
-        container_name:  nginx
-        restart: always
-        ports:
-            - "80:80"
-
     backend:
-        # look for dockerfile and build the container
         build: ./backend
         container_name:  backend
         restart: always
         environment: 
-       	    - SECRET_KEY='cd48e1c22de0961d5d1bfb14f8a66e006cfb1cfbf3f0c0f3'
-            - MONGODB_USERNAME = admin
-            - MONGODB_PASSWORD = bghryeheb3t58
-        volumes:
-            - './backend:/backend'
+            - SECRET_KEY='cd48e1c22de0961d5d1bfb14f8a66e006cfb1cfbf3f0c0f3'
+            - MONGODB_USER=table_app
+            - MONGODB_PASSWORD=gjhtqqw3124t
         expose:
-            - 8080
+            - 5000
+        depends_on:
+            - mongodb
 
     frontend:
         build: ./frontend
         container_name:  frontend
+        tty: true
         restart: always
-        volumes:
-            - './frontend:/frontend'
         ports:
-            - "8000:8000"
-            - "8080:8080"
+            - "80:80"
         expose:
             - 8080
 
     mongodb:
-        image: mongo:4.2.5-bionic
+        build: ./database
         container_name:  mongodb
         restart: always
-        environment:
-            - MONGO_INITDB_ROOT_USERNAME=admin
-            - MONGO_INITDB_ROOT_PASSWORD=bghryeheb3t58
         volumes:
-            - './database:/data/db'
+            - './database:/db'
         ports:
             - "27017:27017"
             - "27018:27018"
@@ -56,12 +43,14 @@ services:
         image: mongo-express
         restart: always
         environment:
-            - ME_CONFIG_MONGODB_ADMINUSERNAME=admin
-            - ME_CONFIG_MONGODB_ADMINPASSWORD=bghryeheb3t58
-            - ME_CONFIG_MONGODB_SERVER=table-app
+            - ME_CONFIG_MONGODB_ADMINUSERNAME=admin-user
+            - ME_CONFIG_MONGODB_ADMINPASSWORD=admin-password
+            - ME_CONFIG_MONGODB_SERVER=mongodb
             - ME_CONFIG_MONGODB_PORT=27017
             # web login username and password
-            - ME_CONFIG_BASICAUTH_USERNAME=pi
-            - ME_CONFIG_BASICAUTH_PASSWORD=raspberry
+            - ME_CONFIG_BASICAUTH_USERNAME=admin-user
+            - ME_CONFIG_BASICAUTH_PASSWORD=admin-password
         ports:
             - 8081:8081
+        depends_on:
+            - mongodb

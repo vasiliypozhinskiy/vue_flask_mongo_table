@@ -6,6 +6,6 @@ ADD . /backend
 
 RUN pip install -r requirements.txt
 
-EXPOSE 8000
+EXPOSE 5000
 
-CMD ["uwsgi", "app.ini"]
+CMD ["python", "main.py"]

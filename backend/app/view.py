@@ -20,7 +20,7 @@ def token_required(func):
     return wrapper
 
 
-@app.route('api/get-token', methods=["POST"])
+@app.route('/api/get-token', methods=["POST"])
 @cross_origin()
 def auth():
     data = json.loads(request.data.decode("utf-8"))
@@ -30,7 +30,7 @@ def auth():
             return jsonify(token=token)
 
 
-@app.route('api/get-table')
+@app.route('/api/get-table')
 @cross_origin()
 @token_required
 def get_table():
@@ -75,3 +75,8 @@ def delete_rows(ids):
     for id_ in ids:
         Table.objects(id=id_).delete()
     emit("DELETE_ROWS", ids, broadcast=True)
+
+
+@socketio.on("connect")
+def connect():
+    print("connected")

@@ -81,7 +81,7 @@ export default new Vuex.Store({
     },
     actions: {
         "LOAD_TABLE": ({commit, state}) => {
-            axios.get( 'http://10.1.0.7/api/get-table',
+            axios.get( 'http://127.0.0.1/api/get-table',
                 {headers: {'Authorization': state.token, "Username": state.username}})
                 .then(response => {
                     commit('SAVE_TABLE', response.data.table);
@@ -89,7 +89,7 @@ export default new Vuex.Store({
         },
         "AUTH_REQUEST": ({commit}, user) => {
             return new Promise((resolve, reject) => {
-                axios({url: 'http://10.1.0.7/api/get-token', data: user, method: 'POST'})
+                axios({url: 'http://127.0.0.1/api/get-token', data: user, method: 'POST'})
                     .then((response) => {
                         const token = response.data.token
                         localStorage.setItem('user-token', token)

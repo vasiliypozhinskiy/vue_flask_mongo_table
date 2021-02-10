@@ -4,6 +4,8 @@ import axios from "axios";
 
 Vue.use(Vuex)
 
+export let host = 'http://10.1.0.7/'
+
 export default new Vuex.Store({
     state: {
         token: localStorage.getItem('user-token') || '',
@@ -80,7 +82,7 @@ export default new Vuex.Store({
     },
     actions: {
         "LOAD_TABLE": ({commit, state}) => {
-            axios.get('http://localhost:80/api/get-table',
+            axios.get( host + 'api/get-table',
                 {headers: {'Authorization': state.token, "Username": state.username}})
                 .then(response => {
                     commit('SAVE_TABLE', response.data.table);
@@ -88,7 +90,7 @@ export default new Vuex.Store({
         },
         "AUTH_REQUEST": ({commit}, user) => {
             return new Promise((resolve, reject) => {
-                axios({url: 'http://127.0.0.1:80/api/get-token', data: user, method: 'POST'})
+                axios({url: host + 'api/get-token', data: user, method: 'POST'})
                     .then((response) => {
                         const token = response.data.token
                         localStorage.setItem('user-token', token)
@@ -105,7 +107,7 @@ export default new Vuex.Store({
         "AUTH_LOGOUT": ({commit}) => {
             return new Promise((resolve) => {
                 commit("AUTH_LOGOUT")
-                localStorage.removeItem('user-token') // clear your user's token from localstorage
+                localStorage.removeItem('user-token')
                 resolve()
             })
         },

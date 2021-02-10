@@ -105,7 +105,8 @@ export default new Vuex.Store({
         "AUTH_LOGOUT": ({commit}) => {
             return new Promise((resolve) => {
                 commit("AUTH_LOGOUT")
-                localStorage.removeItem('user-token') // clear your user's token from localstorage
+                localStorage.removeItem('user-token')
+                localStorage.removeItem('username')
                 resolve()
             })
         },
